@@ -1,0 +1,10 @@
+apply plugin: 'java'
+
+version = '0.1.0'
+
+jar {
+    manifest {
+        attributes('Implementation-Title': project.name,
+                   'Implementation-Version': project.version)
+    }
+}
