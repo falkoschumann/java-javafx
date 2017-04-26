@@ -52,8 +52,10 @@ public class ViewController {
     }
 
     public void loadViewIfNeeded() {
-        if (!isViewLoaded())
+        if (!isViewLoaded()) {
             loadView();
+            viewDidLoad();
+        }
     }
 
     public boolean isViewLoaded() {
@@ -66,6 +68,9 @@ public class ViewController {
         } catch (IOException ex) {
             throw new IllegalStateException("Can not load view from location " + location + ".", ex);
         }
+    }
+
+    public void viewDidLoad() {
     }
 
 }
