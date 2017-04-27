@@ -41,7 +41,6 @@ public class ViewControllerTest extends ApplicationTest {
         assertEquals(Arrays.asList("viewDidLoad", "viewWillAppear", "viewDidAppear", "viewWillDisappear", "viewDidDisappear"), viewEvents);
     }
 
-
     private class TestingViewController extends ViewController {
 
         TestingViewController() {
