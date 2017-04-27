@@ -14,9 +14,16 @@ import java.util.*;
 
 /**
  * Provides the infrastructure for managing the views of your JavaFX app.
- * <p>
- * Give location of a FXML file in constructor or override {@link #loadView()} to create view manually and set it with
- * {@link #setView(Parent)}.
+ * <p> Give location of a FXML file in constructor or override {@link #loadView()} to create view
+ * manually and set it with {@link #setView(Parent)}.</p>
+ * <p>React to view events by override the methods</p>
+ * <ul>
+ * <li>{@link #viewDidLoad()} called after the view is loaded or created by {@link #loadView()}.</li>
+ * <li>{@link #viewWillAppear()} called before the view is added to the view hierarchy.</li>
+ * <li>{@link #viewDidAppear()} called after the view is added to the view hierarchy.</li>
+ * <li>{@link #viewWillDisappear()} called before the view is removed to the view hierarchy.</li>
+ * <li>{@link #viewDidDisappear()} called after the view is removed to the view hierarchy.</li>
+ * </ul>
  */
 public class ViewController {
 
@@ -70,7 +77,19 @@ public class ViewController {
         }
     }
 
-    public void viewDidLoad() {
+    protected void viewDidLoad() {
+    }
+
+    protected void viewWillAppear() {
+    }
+
+    protected void viewDidAppear() {
+    }
+
+    protected void viewWillDisappear() {
+    }
+
+    protected void viewDidDisappear() {
     }
 
 }

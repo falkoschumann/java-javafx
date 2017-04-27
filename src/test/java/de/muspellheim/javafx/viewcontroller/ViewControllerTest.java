@@ -5,7 +5,6 @@
 
 package de.muspellheim.javafx.viewcontroller;
 
-import javafx.scene.*;
 import javafx.stage.*;
 import org.junit.*;
 import org.testfx.framework.junit.*;
@@ -16,9 +15,7 @@ import static org.junit.Assert.*;
 
 public class ViewControllerTest extends ApplicationTest {
 
-    // UIWindow => Scene ? UIWindow knows the root view controller?!
-    // UIView => Parent
-
+    private StageController stageController;
     private ViewController viewController;
 
     private List<String> viewEvents = new ArrayList<>();
@@ -26,17 +23,24 @@ public class ViewControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) {
         viewController = new TestingViewController();
-        Scene scene = new Scene(viewController.getView());
-        stage.setScene(scene);
-        stage.show();
+
+        stageController = new StageController(stage);
+        stageController.setRootViewController(viewController);
+        stageController.show();
     }
 
     @Test
-    public void testCallbacks_init() {
-        assertEquals(Arrays.asList("viewDidLoad"), viewEvents);
-        // TODO viewWillAppear
-        // TODO viewDidAppear
+    public void testCallbacks_Init() {
+        assertEquals(Arrays.asList("viewDidLoad", "viewWillAppear", "viewDidAppear"), viewEvents);
     }
+
+    @Test
+    public void testCallbacks_Hide() throws Exception {
+        interact(() -> stageController.hide());
+
+        assertEquals(Arrays.asList("viewDidLoad", "viewWillAppear", "viewDidAppear", "viewWillDisappear", "viewDidDisappear"), viewEvents);
+    }
+
 
     private class TestingViewController extends ViewController {
 
@@ -47,6 +51,26 @@ public class ViewControllerTest extends ApplicationTest {
         @Override
         public void viewDidLoad() {
             viewEvents.add("viewDidLoad");
+        }
+
+        @Override
+        public void viewWillAppear() {
+            viewEvents.add("viewWillAppear");
+        }
+
+        @Override
+        public void viewDidAppear() {
+            viewEvents.add("viewDidAppear");
+        }
+
+        @Override
+        public void viewWillDisappear() {
+            viewEvents.add("viewWillDisappear");
+        }
+
+        @Override
+        public void viewDidDisappear() {
+            viewEvents.add("viewDidDisappear");
         }
 
     }
