@@ -33,6 +33,9 @@ public class ViewController {
     private String title;
     private Parent view;
 
+    private ViewController presentingViewController;
+    private ViewController presentedViewController;
+
     public ViewController() {
         this(null, null);
     }
@@ -92,6 +95,20 @@ public class ViewController {
         } catch (IOException ex) {
             throw new IllegalStateException("Can not load view from location " + getLocation() + ".", ex);
         }
+    }
+
+    public void present(ViewController viewControllerToPresent) {
+        getView().getScene().setRoot(viewControllerToPresent.getView());
+        presentedViewController = viewControllerToPresent;
+        viewControllerToPresent.presentingViewController = this;
+    }
+
+    public ViewController getPresentingViewController() {
+        return presentingViewController;
+    }
+
+    public ViewController getPresentedViewController() {
+        return presentedViewController;
     }
 
     protected void viewDidLoad() {
