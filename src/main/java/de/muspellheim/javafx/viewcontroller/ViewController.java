@@ -30,6 +30,7 @@ public class ViewController {
     private final URL location;
     private final ResourceBundle resources;
 
+    private String title;
     private Parent view;
 
     public ViewController() {
@@ -45,8 +46,24 @@ public class ViewController {
         this.resources = resources;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public URL getLocation() {
         return location;
+    }
+
+    public ResourceBundle getResources() {
+        return resources;
+    }
+
+    public Parent viewIfLoaded() {
+        return view;
     }
 
     public Parent getView() {
@@ -58,7 +75,7 @@ public class ViewController {
         this.view = view;
     }
 
-    public void loadViewIfNeeded() {
+    protected void loadViewIfNeeded() {
         if (!isViewLoaded()) {
             loadView();
             viewDidLoad();
@@ -66,14 +83,14 @@ public class ViewController {
     }
 
     public boolean isViewLoaded() {
-        return view != null;
+        return viewIfLoaded() != null;
     }
 
-    public void loadView() {
+    protected void loadView() {
         try {
-            view = FXMLLoader.load(location, resources);
+            setView(FXMLLoader.load(getLocation(), getResources()));
         } catch (IOException ex) {
-            throw new IllegalStateException("Can not load view from location " + location + ".", ex);
+            throw new IllegalStateException("Can not load view from location " + getLocation() + ".", ex);
         }
     }
 
@@ -90,6 +107,13 @@ public class ViewController {
     }
 
     protected void viewDidDisappear() {
+    }
+
+    @Override
+    public String toString() {
+        return "ViewController{" +
+                "title='" + getTitle() + '\'' +
+                '}';
     }
 
 }

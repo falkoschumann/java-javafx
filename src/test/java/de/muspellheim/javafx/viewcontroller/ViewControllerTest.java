@@ -25,20 +25,32 @@ public class ViewControllerTest extends ApplicationTest {
         viewController = new TestingViewController();
 
         stageController = new StageController(stage);
+    }
+
+    @Test
+    public void testViewEvents() {
         stageController.setRootViewController(viewController);
-        stageController.show();
-    }
+        assertEquals(Collections.emptyList(), viewEvents);
 
-    @Test
-    public void testCallbacks_Init() {
+        viewController.getView();
+        assertEquals(Arrays.asList("viewDidLoad"), viewEvents);
+
+        interact(() -> stageController.show());
         assertEquals(Arrays.asList("viewDidLoad", "viewWillAppear", "viewDidAppear"), viewEvents);
+
+        interact(() -> stageController.hide());
+        assertEquals(Arrays.asList("viewDidLoad", "viewWillAppear", "viewDidAppear", "viewWillDisappear", "viewDidDisappear"), viewEvents);
     }
 
-    @Test
-    public void testCallbacks_Hide() throws Exception {
-        interact(() -> stageController.hide());
+    // TODO public void present(ViewController viewControllerToPresent, Runnable completion)
 
-        assertEquals(Arrays.asList("viewDidLoad", "viewWillAppear", "viewDidAppear", "viewWillDisappear", "viewDidDisappear"), viewEvents);
+    @Test
+    public void testToString() {
+        viewController.setTitle("foo");
+        assertEquals("ViewController{title='foo'}", viewController.toString());
+
+        viewController.setTitle("bar");
+        assertEquals("ViewController{title='bar'}", viewController.toString());
     }
 
     private class TestingViewController extends ViewController {
