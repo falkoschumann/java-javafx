@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/falkoschumann/javafx-viewcontroller.svg?branch=feature/controller)](https://travis-ci.org/falkoschumann/javafx-viewcontroller)
+[![Build Status](https://travis-ci.org/falkoschumann/javafx-viewcontroller.svg?branch=feature%2Fcontroller)](https://travis-ci.org/falkoschumann/javafx-viewcontroller)
 [![license](https://img.shields.io/github/license/falkoschumann/javafx-viewcontroller.svg)]()
 
 
