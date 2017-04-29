@@ -40,16 +40,22 @@ public class ViewControllerTest extends ApplicationTest {
         assertEquals(Arrays.asList("helloWorld:viewDidLoad"), viewEvents);
 
         interact(() -> stageController.show());
-        assertEquals(Arrays.asList("helloWorld:viewDidLoad", "helloWorld:viewWillAppear", "helloWorld:viewDidAppear"), viewEvents);
+        assertEquals(Arrays.asList(
+                "helloWorld:viewDidLoad",
+                "helloWorld:viewWillAppear",
+                "helloWorld:viewDidAppear"), viewEvents);
 
         interact(() -> stageController.hide());
-        assertEquals(Arrays.asList("helloWorld:viewDidLoad", "helloWorld:viewWillAppear", "helloWorld:viewDidAppear", "helloWorld:viewWillDisappear", "helloWorld:viewDidDisappear"), viewEvents);
+        assertEquals(Arrays.asList(
+                "helloWorld:viewDidLoad",
+                "helloWorld:viewWillAppear",
+                "helloWorld:viewDidAppear",
+                "helloWorld:viewWillDisappear",
+                "helloWorld:viewDidDisappear"), viewEvents);
     }
 
     @Test
-    public void testPresent() {
-        // TODO public void present(ViewController viewControllerToPresent, Runnable completion) -> complete after viewDidAppear
-
+    public void testPresent_viewHierarchy() {
         // View controller hierarchy: green
         ViewController green = new ColoredViewController("green", Color.LIGHTGREEN, viewEvents);
         stageController.setRootViewController(green);
@@ -77,6 +83,74 @@ public class ViewControllerTest extends ApplicationTest {
         assertSame(yellow, blue.getPresentedViewController());
         assertSame(blue, yellow.getPresentingViewController());
         assertNull(yellow.getPresentedViewController());
+    }
+
+    @Test
+    public void testPresent_viewEvents() {
+        // View controller hierarchy: green
+        ViewController green = new ColoredViewController("green", Color.LIGHTGREEN, viewEvents);
+        stageController.setRootViewController(green);
+        interact(() -> stageController.show());
+        assertEquals(Arrays.asList(
+                "green:viewDidLoad",
+                "green:viewWillAppear",
+                "green:viewDidAppear"), viewEvents);
+
+        // View controller hierarchy: green -> blue
+        ViewController blue = new ColoredViewController("blue", Color.LIGHTBLUE, viewEvents);
+        green.present(blue, () -> viewEvents.add("blue:complete"));
+        assertEquals(Arrays.asList(
+                "green:viewDidLoad",
+                "green:viewWillAppear",
+                "green:viewDidAppear",
+                "blue:viewDidLoad",
+                "green:viewWillDisappear",
+                "blue:viewWillAppear",
+                "blue:viewDidAppear",
+                "green:viewDidDisappear",
+                "blue:complete"), viewEvents);
+
+        // View controller hierarchy: green -> blue -> yellow
+        ViewController yellow = new ColoredViewController("yellow", Color.LIGHTYELLOW, viewEvents);
+        blue.present(yellow, () -> viewEvents.add("yellow:complete"));
+        assertEquals(Arrays.asList(
+                "green:viewDidLoad",
+                "green:viewWillAppear",
+                "green:viewDidAppear",
+                "blue:viewDidLoad",
+                "green:viewWillDisappear",
+                "blue:viewWillAppear",
+                "blue:viewDidAppear",
+                "green:viewDidDisappear",
+                "blue:complete",
+                "yellow:viewDidLoad",
+                "blue:viewWillDisappear",
+                "yellow:viewWillAppear",
+                "yellow:viewDidAppear",
+                "blue:viewDidDisappear",
+                "yellow:complete"), viewEvents);
+    }
+
+    // TODO public void dismiss(Runnable completion) -> complete after viewDidDisappear
+
+    @Test
+    public void testDismissTail_viewHierarchy() {
+        // TODO implement test
+    }
+
+    @Test
+    public void testDismissTail_viewEvents() {
+        // TODO implement test
+    }
+
+    @Test
+    public void testDismissInnerNode_viewHierarchy() {
+        // TODO implement test
+    }
+
+    @Test
+    public void testDismissInnerNode_viewEvents() {
+        // TODO implement test
     }
 
     @Test

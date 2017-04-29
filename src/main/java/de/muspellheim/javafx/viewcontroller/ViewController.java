@@ -98,9 +98,21 @@ public class ViewController {
     }
 
     public void present(ViewController viewControllerToPresent) {
-        getView().getScene().setRoot(viewControllerToPresent.getView());
+        present(viewControllerToPresent, null);
+    }
+
+    public void present(ViewController viewControllerToPresent, Runnable completion) {
+        Parent viewToPresent = viewControllerToPresent.getView();
+        viewWillDisappear();
+        viewControllerToPresent.viewWillAppear();
+        getView().getScene().setRoot(viewToPresent);
         presentedViewController = viewControllerToPresent;
         viewControllerToPresent.presentingViewController = this;
+        viewControllerToPresent.viewDidAppear();
+        viewDidDisappear();
+
+        if (completion != null)
+            completion.run();
     }
 
     public ViewController getPresentingViewController() {
