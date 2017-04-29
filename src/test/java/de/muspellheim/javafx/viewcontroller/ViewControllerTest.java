@@ -136,6 +136,7 @@ public class ViewControllerTest extends ApplicationTest {
     @Test
     public void testDismissTail_viewHierarchy() {
         // TODO implement test
+        fail("Baka!!");
     }
 
     @Test
