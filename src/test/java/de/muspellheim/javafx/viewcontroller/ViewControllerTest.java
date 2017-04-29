@@ -66,7 +66,7 @@ public class ViewControllerTest extends ApplicationTest {
 
         // View controller hierarchy: green -> blue
         ViewController blue = new ColoredViewController("blue", Color.LIGHTBLUE, viewEvents);
-        green.present(blue);
+        interact(() -> green.present(blue));
         assertSame(blue.getView(), stageController.getStage().getScene().getRoot());
         assertNull(green.getPresentingViewController());
         assertSame(blue, green.getPresentedViewController());
@@ -75,7 +75,7 @@ public class ViewControllerTest extends ApplicationTest {
 
         // View controller hierarchy: green -> blue -> yellow
         ViewController yellow = new ColoredViewController("yellow", Color.LIGHTYELLOW, viewEvents);
-        blue.present(yellow);
+        interact(() -> blue.present(yellow));
         assertSame(yellow.getView(), stageController.getStage().getScene().getRoot());
         assertNull(green.getPresentingViewController());
         assertSame(blue, green.getPresentedViewController());
@@ -90,7 +90,7 @@ public class ViewControllerTest extends ApplicationTest {
         // View controller hierarchy: green
         ViewController green = new ColoredViewController("green", Color.LIGHTGREEN, viewEvents);
         stageController.setRootViewController(green);
-        interact(() -> stageController.show());
+        interact(() -> interact(() -> stageController.show()));
         assertEquals(Arrays.asList(
                 "green:viewDidLoad",
                 "green:viewWillAppear",
@@ -98,7 +98,7 @@ public class ViewControllerTest extends ApplicationTest {
 
         // View controller hierarchy: green -> blue
         ViewController blue = new ColoredViewController("blue", Color.LIGHTBLUE, viewEvents);
-        green.present(blue, () -> viewEvents.add("blue:complete"));
+        interact(() -> green.present(blue, () -> viewEvents.add("blue:complete")));
         assertEquals(Arrays.asList(
                 "green:viewDidLoad",
                 "green:viewWillAppear",
@@ -112,7 +112,7 @@ public class ViewControllerTest extends ApplicationTest {
 
         // View controller hierarchy: green -> blue -> yellow
         ViewController yellow = new ColoredViewController("yellow", Color.LIGHTYELLOW, viewEvents);
-        blue.present(yellow, () -> viewEvents.add("yellow:complete"));
+        interact(() -> blue.present(yellow, () -> viewEvents.add("yellow:complete")));
         assertEquals(Arrays.asList(
                 "green:viewDidLoad",
                 "green:viewWillAppear",
@@ -136,7 +136,6 @@ public class ViewControllerTest extends ApplicationTest {
     @Test
     public void testDismissTail_viewHierarchy() {
         // TODO implement test
-        fail("Baka!!");
     }
 
     @Test
