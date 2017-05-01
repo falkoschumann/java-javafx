@@ -128,13 +128,24 @@ public class ViewController {
 
     public void dismiss() {
         if (getPresentedViewController() != null) {
-            // TODO dismiss all view presented view controllers in hierarchy
-            getPresentedViewController().getView().getScene().setRoot(getView());
-            getPresentedViewController().presentingViewController = null;
-            presentedViewController = null;
+            Scene scene = dismiss(this);
+            scene.setRoot(getView());
         } else if (getPresentingViewController() != null) {
             getPresentingViewController().dismiss();
         }
+    }
+
+    private Scene dismiss(ViewController viewController) {
+        Scene scene;
+        if (viewController.getPresentedViewController() != null) {
+            scene = dismiss(viewController.getPresentedViewController());
+            viewController.getPresentedViewController().presentingViewController = null;
+            viewController.presentedViewController = null;
+        } else {
+            viewController.presentingViewController = null;
+            scene = viewController.getView().getScene();
+        }
+        return scene;
     }
 
     protected void viewWillAppear() {

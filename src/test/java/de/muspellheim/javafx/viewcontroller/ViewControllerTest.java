@@ -123,7 +123,7 @@ public class ViewControllerTest extends ApplicationTest {
     // TODO public void dismiss(Runnable completion) -> complete after viewDidDisappear
 
     @Test
-    public void testDismissPresentedTopViewController_viewControllerHierarchy() {
+    public void testDismissTopViewControllerByPresentedViewController_viewControllerHierarchy() {
         createViewControllerHierarchyGreenBlueYellow();
 
         interact(() -> yellow.dismiss());
@@ -131,11 +131,19 @@ public class ViewControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testDismissPresentingTopViewController_viewHierarchy() {
+    public void testDismissTopViewControllerByPresentingViewController_viewHierarchy() {
         createViewControllerHierarchyGreenBlueYellow();
 
         interact(() -> blue.dismiss());
         assertViewControllerHierarchyIsGreenBlue();
+    }
+
+    @Test
+    public void testDismissHiddenViewController_viewHierarchy() {
+        createViewControllerHierarchyGreenBlueYellow();
+
+        interact(() -> green.dismiss());
+        assertViewControllerHierarchyIsGreen();
     }
 
     @Test
@@ -144,12 +152,7 @@ public class ViewControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testDismissInnerNode_viewHierarchy() {
-        // TODO implement test
-    }
-
-    @Test
-    public void testDismissInnerNode_viewEvents() {
+    public void testDismissHiddenViewController_viewEvents() {
         // TODO implement test
     }
 
@@ -177,6 +180,12 @@ public class ViewControllerTest extends ApplicationTest {
 
         assertNull(green.getPresentingViewController());
         assertNull(green.getPresentedViewController());
+
+        assertNull(blue.getPresentingViewController());
+        assertNull(blue.getPresentedViewController());
+
+        assertNull(yellow.getPresentingViewController());
+        assertNull(yellow.getPresentedViewController());
     }
 
     private void assertViewControllerHierarchyIsGreenBlue() {
@@ -188,6 +197,9 @@ public class ViewControllerTest extends ApplicationTest {
 
         assertSame(green, blue.getPresentingViewController());
         assertNull(blue.getPresentedViewController());
+
+        assertNull(yellow.getPresentingViewController());
+        assertNull(yellow.getPresentedViewController());
     }
 
     private void assertViewControllerHierarchyIsGreenBlueYellow() {
