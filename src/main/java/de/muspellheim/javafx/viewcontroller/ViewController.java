@@ -127,21 +127,31 @@ public class ViewController {
     }
 
     public void dismiss() {
+        dismiss(null);
+    }
+
+    public void dismiss(Runnable completion) {
         if (getPresentedViewController() != null) {
-            Scene scene = dismiss(this);
+            Scene scene = doDismiss(this);
             scene.setRoot(getView());
+            if (completion != null)
+                completion.run();
         } else if (getPresentingViewController() != null) {
-            getPresentingViewController().dismiss();
+            getPresentingViewController().dismiss(completion);
         }
     }
 
-    private Scene dismiss(ViewController viewController) {
+    private Scene doDismiss(ViewController viewController) {
         Scene scene;
         if (viewController.getPresentedViewController() != null) {
-            scene = dismiss(viewController.getPresentedViewController());
+            scene = doDismiss(viewController.getPresentedViewController());
             viewController.getPresentedViewController().presentingViewController = null;
+            viewController.viewDidAppear();
+            viewController.presentedViewController.viewDidDisappear();
             viewController.presentedViewController = null;
         } else {
+            viewController.viewWillDisappear();
+            viewController.presentingViewController.viewWillAppear();
             viewController.presentingViewController = null;
             scene = viewController.getView().getScene();
         }

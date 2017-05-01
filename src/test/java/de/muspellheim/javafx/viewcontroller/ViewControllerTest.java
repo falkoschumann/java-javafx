@@ -44,10 +44,10 @@ public class ViewControllerTest extends ApplicationTest {
     public void testRootViewController_viewEvents() {
         ViewController viewController = new HelloWorldViewController(viewEvents);
         stage.setRootViewController(viewController);
-        assertEquals(Collections.emptyList(), viewEvents);
+        assertTrue(viewEvents.isEmpty());
 
         viewController.getView();
-        assertEquals(Arrays.asList("helloWorld:viewDidLoad"), viewEvents);
+        assertEquals(Collections.singletonList("helloWorld:viewDidLoad"), viewEvents);
 
         interact(() -> stage.show());
         assertEquals(Arrays.asList(
@@ -88,7 +88,7 @@ public class ViewControllerTest extends ApplicationTest {
                 "green:viewDidAppear"), viewEvents);
 
         // View controller hierarchy: green -> blue
-        interact(() -> green.present(blue, () -> viewEvents.add("blue:present-complete")));
+        interact(() -> green.present(blue, () -> viewEvents.add("green:presentBlueComplete")));
         assertEquals(Arrays.asList(
                 "green:viewDidLoad",
                 "green:viewWillAppear",
@@ -98,10 +98,10 @@ public class ViewControllerTest extends ApplicationTest {
                 "blue:viewWillAppear",
                 "blue:viewDidAppear",
                 "green:viewDidDisappear",
-                "blue:present-complete"), viewEvents);
+                "green:presentBlueComplete"), viewEvents);
 
         // View controller hierarchy: green -> blue -> yellow
-        interact(() -> blue.present(yellow, () -> viewEvents.add("yellow:present-complete")));
+        interact(() -> blue.present(yellow, () -> viewEvents.add("blue:presentYellowComplete")));
         assertEquals(Arrays.asList(
                 "green:viewDidLoad",
                 "green:viewWillAppear",
@@ -111,16 +111,14 @@ public class ViewControllerTest extends ApplicationTest {
                 "blue:viewWillAppear",
                 "blue:viewDidAppear",
                 "green:viewDidDisappear",
-                "blue:present-complete",
+                "green:presentBlueComplete",
                 "yellow:viewDidLoad",
                 "blue:viewWillDisappear",
                 "yellow:viewWillAppear",
                 "yellow:viewDidAppear",
                 "blue:viewDidDisappear",
-                "yellow:present-complete"), viewEvents);
+                "blue:presentYellowComplete"), viewEvents);
     }
-
-    // TODO public void dismiss(Runnable completion) -> complete after viewDidDisappear
 
     @Test
     public void testDismissTopViewControllerByPresentedViewController_viewControllerHierarchy() {
@@ -148,7 +146,30 @@ public class ViewControllerTest extends ApplicationTest {
 
     @Test
     public void testDismissTopViewController_viewEvents() {
-        // TODO implement test
+        createViewControllerHierarchyGreenBlueYellow();
+
+        interact(() -> yellow.dismiss(() -> viewEvents.add("yellow:dismissComplete")));
+        assertEquals(Arrays.asList(
+                "green:viewDidLoad",
+                "green:viewWillAppear",
+                "green:viewDidAppear",
+                "blue:viewDidLoad",
+                "green:viewWillDisappear",
+                "blue:viewWillAppear",
+                "blue:viewDidAppear",
+                "green:viewDidDisappear",
+                "green:presentBlueComplete",
+                "yellow:viewDidLoad",
+                "blue:viewWillDisappear",
+                "yellow:viewWillAppear",
+                "yellow:viewDidAppear",
+                "blue:viewDidDisappear",
+                "blue:presentYellowComplete",
+                "yellow:viewWillDisappear",
+                "blue:viewWillAppear",
+                "blue:viewDidAppear",
+                "yellow:viewDidDisappear",
+                "yellow:dismissComplete"), viewEvents);
     }
 
     @Test
@@ -170,8 +191,8 @@ public class ViewControllerTest extends ApplicationTest {
     private void createViewControllerHierarchyGreenBlueYellow() {
         stage.setRootViewController(green);
         interact(() -> stage.show());
-        interact(() -> green.present(blue));
-        interact(() -> blue.present(yellow));
+        interact(() -> green.present(blue, () -> viewEvents.add("green:presentBlueComplete")));
+        interact(() -> blue.present(yellow, () -> viewEvents.add("blue:presentYellowComplete")));
     }
 
     private void assertViewControllerHierarchyIsGreen() {
