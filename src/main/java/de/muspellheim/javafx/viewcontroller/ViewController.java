@@ -97,6 +97,9 @@ public class ViewController {
         }
     }
 
+    protected void viewDidLoad() {
+    }
+
     public void present(ViewController viewControllerToPresent) {
         present(viewControllerToPresent, null);
     }
@@ -123,7 +126,15 @@ public class ViewController {
         return presentedViewController;
     }
 
-    protected void viewDidLoad() {
+    public void dismiss() {
+        if (getPresentedViewController() != null) {
+            // TODO dismiss all view presented view controllers in hierarchy
+            getPresentedViewController().getView().getScene().setRoot(getView());
+            getPresentedViewController().presentingViewController = null;
+            presentedViewController = null;
+        } else if (getPresentingViewController() != null) {
+            getPresentingViewController().dismiss();
+        }
     }
 
     protected void viewWillAppear() {

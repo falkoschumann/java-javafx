@@ -16,36 +16,46 @@ import static org.junit.Assert.*;
 
 public class ViewControllerTest extends ApplicationTest {
 
-    private StageController stageController;
+    private StageController stage;
+    private ViewController green;
+    private ViewController blue;
+    private ViewController yellow;
 
     private List<String> viewEvents = new ArrayList<>();
 
+    @Before
+    public void setUp() {
+        green = new ColoredViewController("green", Color.LIGHTGREEN, viewEvents);
+        blue = new ColoredViewController("blue", Color.LIGHTBLUE, viewEvents);
+        yellow = new ColoredViewController("yellow", Color.LIGHTYELLOW, viewEvents);
+    }
+
     @Override
     public void start(Stage stage) {
-        stageController = new StageController(stage);
+        this.stage = new StageController(stage);
     }
 
     @Override
     public void stop() throws Exception {
-        stageController.hide();
+        stage.hide();
     }
 
     @Test
-    public void testViewEvents() {
+    public void testRootViewController_viewEvents() {
         ViewController viewController = new HelloWorldViewController(viewEvents);
-        stageController.setRootViewController(viewController);
+        stage.setRootViewController(viewController);
         assertEquals(Collections.emptyList(), viewEvents);
 
         viewController.getView();
         assertEquals(Arrays.asList("helloWorld:viewDidLoad"), viewEvents);
 
-        interact(() -> stageController.show());
+        interact(() -> stage.show());
         assertEquals(Arrays.asList(
                 "helloWorld:viewDidLoad",
                 "helloWorld:viewWillAppear",
                 "helloWorld:viewDidAppear"), viewEvents);
 
-        interact(() -> stageController.hide());
+        interact(() -> stage.hide());
         assertEquals(Arrays.asList(
                 "helloWorld:viewDidLoad",
                 "helloWorld:viewWillAppear",
@@ -55,50 +65,30 @@ public class ViewControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testPresent_viewHierarchy() {
-        // View controller hierarchy: green
-        ViewController green = new ColoredViewController("green", Color.LIGHTGREEN, viewEvents);
-        stageController.setRootViewController(green);
-        interact(() -> stageController.show());
-        assertSame(green.getView(), stageController.getStage().getScene().getRoot());
-        assertNull(green.getPresentingViewController());
-        assertNull(green.getPresentedViewController());
+    public void testPresent_viewControllerHierarchy() {
+        stage.setRootViewController(green);
+        interact(() -> stage.show());
+        assertViewControllerHierarchyIsGreen();
 
-        // View controller hierarchy: green -> blue
-        ViewController blue = new ColoredViewController("blue", Color.LIGHTBLUE, viewEvents);
         interact(() -> green.present(blue));
-        assertSame(blue.getView(), stageController.getStage().getScene().getRoot());
-        assertNull(green.getPresentingViewController());
-        assertSame(blue, green.getPresentedViewController());
-        assertSame(green, blue.getPresentingViewController());
-        assertNull(blue.getPresentedViewController());
+        assertViewControllerHierarchyIsGreenBlue();
 
-        // View controller hierarchy: green -> blue -> yellow
-        ViewController yellow = new ColoredViewController("yellow", Color.LIGHTYELLOW, viewEvents);
         interact(() -> blue.present(yellow));
-        assertSame(yellow.getView(), stageController.getStage().getScene().getRoot());
-        assertNull(green.getPresentingViewController());
-        assertSame(blue, green.getPresentedViewController());
-        assertSame(green, blue.getPresentingViewController());
-        assertSame(yellow, blue.getPresentedViewController());
-        assertSame(blue, yellow.getPresentingViewController());
-        assertNull(yellow.getPresentedViewController());
+        assertViewControllerHierarchyIsGreenBlueYellow();
     }
 
     @Test
     public void testPresent_viewEvents() {
         // View controller hierarchy: green
-        ViewController green = new ColoredViewController("green", Color.LIGHTGREEN, viewEvents);
-        stageController.setRootViewController(green);
-        interact(() -> interact(() -> stageController.show()));
+        stage.setRootViewController(green);
+        interact(() -> interact(() -> stage.show()));
         assertEquals(Arrays.asList(
                 "green:viewDidLoad",
                 "green:viewWillAppear",
                 "green:viewDidAppear"), viewEvents);
 
         // View controller hierarchy: green -> blue
-        ViewController blue = new ColoredViewController("blue", Color.LIGHTBLUE, viewEvents);
-        interact(() -> green.present(blue, () -> viewEvents.add("blue:complete")));
+        interact(() -> green.present(blue, () -> viewEvents.add("blue:present-complete")));
         assertEquals(Arrays.asList(
                 "green:viewDidLoad",
                 "green:viewWillAppear",
@@ -108,11 +98,10 @@ public class ViewControllerTest extends ApplicationTest {
                 "blue:viewWillAppear",
                 "blue:viewDidAppear",
                 "green:viewDidDisappear",
-                "blue:complete"), viewEvents);
+                "blue:present-complete"), viewEvents);
 
         // View controller hierarchy: green -> blue -> yellow
-        ViewController yellow = new ColoredViewController("yellow", Color.LIGHTYELLOW, viewEvents);
-        interact(() -> blue.present(yellow, () -> viewEvents.add("yellow:complete")));
+        interact(() -> blue.present(yellow, () -> viewEvents.add("yellow:present-complete")));
         assertEquals(Arrays.asList(
                 "green:viewDidLoad",
                 "green:viewWillAppear",
@@ -122,24 +111,35 @@ public class ViewControllerTest extends ApplicationTest {
                 "blue:viewWillAppear",
                 "blue:viewDidAppear",
                 "green:viewDidDisappear",
-                "blue:complete",
+                "blue:present-complete",
                 "yellow:viewDidLoad",
                 "blue:viewWillDisappear",
                 "yellow:viewWillAppear",
                 "yellow:viewDidAppear",
                 "blue:viewDidDisappear",
-                "yellow:complete"), viewEvents);
+                "yellow:present-complete"), viewEvents);
     }
 
     // TODO public void dismiss(Runnable completion) -> complete after viewDidDisappear
 
     @Test
-    public void testDismissTail_viewHierarchy() {
-        // TODO implement test
+    public void testDismissPresentedTopViewController_viewControllerHierarchy() {
+        createViewControllerHierarchyGreenBlueYellow();
+
+        interact(() -> yellow.dismiss());
+        assertViewControllerHierarchyIsGreenBlue();
     }
 
     @Test
-    public void testDismissTail_viewEvents() {
+    public void testDismissPresentingTopViewController_viewHierarchy() {
+        createViewControllerHierarchyGreenBlueYellow();
+
+        interact(() -> blue.dismiss());
+        assertViewControllerHierarchyIsGreenBlue();
+    }
+
+    @Test
+    public void testDismissTopViewController_viewEvents() {
         // TODO implement test
     }
 
@@ -162,6 +162,46 @@ public class ViewControllerTest extends ApplicationTest {
 
         viewController.setTitle("bar");
         assertEquals("ViewController{title='bar'}", viewController.toString());
+    }
+
+    private void createViewControllerHierarchyGreenBlueYellow() {
+        stage.setRootViewController(green);
+        interact(() -> stage.show());
+        interact(() -> green.present(blue));
+        interact(() -> blue.present(yellow));
+    }
+
+    private void assertViewControllerHierarchyIsGreen() {
+        assertSame(green, stage.getRootViewController());
+        assertSame(green.getView(), stage.getStage().getScene().getRoot());
+
+        assertNull(green.getPresentingViewController());
+        assertNull(green.getPresentedViewController());
+    }
+
+    private void assertViewControllerHierarchyIsGreenBlue() {
+        assertSame(green, stage.getRootViewController());
+        assertSame(blue.getView(), stage.getStage().getScene().getRoot());
+
+        assertNull(green.getPresentingViewController());
+        assertSame(blue, green.getPresentedViewController());
+
+        assertSame(green, blue.getPresentingViewController());
+        assertNull(blue.getPresentedViewController());
+    }
+
+    private void assertViewControllerHierarchyIsGreenBlueYellow() {
+        assertSame(green, stage.getRootViewController());
+        assertSame(yellow.getView(), stage.getStage().getScene().getRoot());
+
+        assertNull(green.getPresentingViewController());
+        assertSame(blue, green.getPresentedViewController());
+
+        assertSame(green, blue.getPresentingViewController());
+        assertSame(yellow, blue.getPresentedViewController());
+
+        assertSame(blue, yellow.getPresentingViewController());
+        assertNull(yellow.getPresentedViewController());
     }
 
 }
