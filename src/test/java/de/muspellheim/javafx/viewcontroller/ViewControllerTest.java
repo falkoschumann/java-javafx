@@ -79,20 +79,21 @@ public class ViewControllerTest extends ApplicationTest {
 
     @Test
     public void testPresent_viewEvents() {
-        // View controller hierarchy: green
         stage.setRootViewController(green);
         interact(() -> interact(() -> stage.show()));
         assertEquals(Arrays.asList(
+                // View controller hierarchy: green
                 "green:viewDidLoad",
                 "green:viewWillAppear",
                 "green:viewDidAppear"), viewEvents);
 
-        // View controller hierarchy: green -> blue
         interact(() -> green.present(blue, () -> viewEvents.add("green:presentBlueComplete")));
         assertEquals(Arrays.asList(
+                // View controller hierarchy: green
                 "green:viewDidLoad",
                 "green:viewWillAppear",
                 "green:viewDidAppear",
+                // View controller hierarchy: green -> blue
                 "blue:viewDidLoad",
                 "green:viewWillDisappear",
                 "blue:viewWillAppear",
@@ -100,18 +101,20 @@ public class ViewControllerTest extends ApplicationTest {
                 "green:viewDidDisappear",
                 "green:presentBlueComplete"), viewEvents);
 
-        // View controller hierarchy: green -> blue -> yellow
         interact(() -> blue.present(yellow, () -> viewEvents.add("blue:presentYellowComplete")));
         assertEquals(Arrays.asList(
+                // View controller hierarchy: green
                 "green:viewDidLoad",
                 "green:viewWillAppear",
                 "green:viewDidAppear",
+                // View controller hierarchy: green -> blue
                 "blue:viewDidLoad",
                 "green:viewWillDisappear",
                 "blue:viewWillAppear",
                 "blue:viewDidAppear",
                 "green:viewDidDisappear",
                 "green:presentBlueComplete",
+                // View controller hierarchy: green -> blue -> yellow
                 "yellow:viewDidLoad",
                 "blue:viewWillDisappear",
                 "yellow:viewWillAppear",
@@ -148,23 +151,27 @@ public class ViewControllerTest extends ApplicationTest {
     public void testDismissTopViewController_viewEvents() {
         createViewControllerHierarchyGreenBlueYellow();
 
-        interact(() -> yellow.dismiss(() -> viewEvents.add("yellow:dismissComplete")));
+        interact(() -> blue.dismiss(() -> viewEvents.add("yellow:dismissComplete")));
         assertEquals(Arrays.asList(
+                // View controller hierarchy: green
                 "green:viewDidLoad",
                 "green:viewWillAppear",
                 "green:viewDidAppear",
+                // View controller hierarchy: green -> blue
                 "blue:viewDidLoad",
                 "green:viewWillDisappear",
                 "blue:viewWillAppear",
                 "blue:viewDidAppear",
                 "green:viewDidDisappear",
                 "green:presentBlueComplete",
+                // View controller hierarchy: green -> blue -> yellow
                 "yellow:viewDidLoad",
                 "blue:viewWillDisappear",
                 "yellow:viewWillAppear",
                 "yellow:viewDidAppear",
                 "blue:viewDidDisappear",
                 "blue:presentYellowComplete",
+                // View controller hierarchy: green -> blue
                 "yellow:viewWillDisappear",
                 "blue:viewWillAppear",
                 "blue:viewDidAppear",
@@ -174,7 +181,38 @@ public class ViewControllerTest extends ApplicationTest {
 
     @Test
     public void testDismissHiddenViewController_viewEvents() {
-        // TODO implement test
+        createViewControllerHierarchyGreenBlueYellow();
+
+        interact(() -> green.dismiss(() -> viewEvents.add("green:dismissComplete")));
+        assertEquals(Arrays.asList(
+                // View controller hierarchy: green
+                "green:viewDidLoad",
+                "green:viewWillAppear",
+                "green:viewDidAppear",
+                // View controller hierarchy: green -> blue
+                "blue:viewDidLoad",
+                "green:viewWillDisappear",
+                "blue:viewWillAppear",
+                "blue:viewDidAppear",
+                "green:viewDidDisappear",
+                "green:presentBlueComplete",
+                // View controller hierarchy: green -> blue -> yellow
+                "yellow:viewDidLoad",
+                "blue:viewWillDisappear",
+                "yellow:viewWillAppear",
+                "yellow:viewDidAppear",
+                "blue:viewDidDisappear",
+                "blue:presentYellowComplete",
+                // View controller hierarchy: green
+                "yellow:viewWillDisappear",
+                "blue:viewWillAppear",
+                "blue:viewDidAppear",
+                "yellow:viewDidDisappear",
+                "blue:viewWillDisappear",
+                "green:viewWillAppear",
+                "green:viewDidAppear",
+                "blue:viewDidDisappear",
+                "green:dismissComplete"), viewEvents);
     }
 
     @Test

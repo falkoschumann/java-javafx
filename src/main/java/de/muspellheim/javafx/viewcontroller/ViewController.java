@@ -132,8 +132,7 @@ public class ViewController {
 
     public void dismiss(Runnable completion) {
         if (getPresentedViewController() != null) {
-            Scene scene = doDismiss(this);
-            scene.setRoot(getView());
+            Scene scene = doDismiss(getPresentedViewController());
             if (completion != null)
                 completion.run();
         } else if (getPresentingViewController() != null) {
@@ -142,21 +141,53 @@ public class ViewController {
     }
 
     private Scene doDismiss(ViewController viewController) {
+        return doDismiss(new LinkedList<>(Collections.singleton(viewController)));
+    }
+
+    private Scene doDismiss(Deque<ViewController> viewControllers) {
         Scene scene;
-        if (viewController.getPresentedViewController() != null) {
-            scene = doDismiss(viewController.getPresentedViewController());
-            viewController.getPresentedViewController().presentingViewController = null;
-            viewController.viewDidAppear();
-            viewController.presentedViewController.viewDidDisappear();
-            viewController.presentedViewController = null;
+        ViewController lastViewController = viewControllers.peekLast();
+        if (lastViewController.getPresentedViewController() != null) {
+            viewControllers.offerLast(lastViewController.getPresentedViewController());
+            scene = doDismiss(viewControllers);
         } else {
-            viewController.viewWillDisappear();
-            viewController.presentingViewController.viewWillAppear();
-            viewController.presentingViewController = null;
-            scene = viewController.getView().getScene();
+            scene = lastViewController.getView().getScene();
+        }
+
+        ViewController disapperingViewController = viewControllers.pollLast();
+        ViewController apperingViewController = disapperingViewController.getPresentingViewController();
+
+        disapperingViewController.viewWillDisappear();
+        apperingViewController.viewWillAppear();
+
+        disapperingViewController.presentingViewController = null;
+        apperingViewController.presentedViewController = null;
+        if (viewControllers.isEmpty())
+            scene.setRoot(getView());
+
+        apperingViewController.viewDidAppear();
+        disapperingViewController.viewDidDisappear();
+
+        return scene;
+    }
+
+    /*
+    private Scene doDismiss(Deque<ViewController> viewControllers) {
+        Scene scene;
+        if (viewControllers.peekLast().getPresentedViewController() != null) {
+            viewControllers.peekLast().presentedViewController.viewWillDisappear();
+            viewControllers.peekLast().viewWillAppear();
+            scene = doDismiss(viewControllers.peekLast().getPresentedViewController());
+            viewControllers.peekLast().getPresentedViewController().presentingViewController = null;
+            viewControllers.peekLast().viewDidAppear();
+            viewControllers.peekLast().presentedViewController.viewDidDisappear();
+            viewControllers.peekLast().presentedViewController = null;
+        } else {
+            scene = viewControllers.peekLast().getView().getScene();
         }
         return scene;
     }
+    */
 
     protected void viewWillAppear() {
     }
