@@ -31,6 +31,8 @@ public class ViewController {
     private final ResourceBundle resources;
 
     private String title;
+
+    @FXML
     private Parent view;
 
     private ViewController presentingViewController;

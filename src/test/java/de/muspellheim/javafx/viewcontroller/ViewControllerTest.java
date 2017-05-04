@@ -5,6 +5,8 @@
 
 package de.muspellheim.javafx.viewcontroller;
 
+import javafx.fxml.*;
+import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.stage.*;
 import org.junit.*;
@@ -41,27 +43,36 @@ public class ViewControllerTest extends ApplicationTest {
     }
 
     @Test
+    public void testRootViewController_FXML() throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("HelloWorld.fxml"));
+        loader.load();
+        ViewController viewController = loader.getController();
+
+        assertTrue(viewController.getView() instanceof StackPane);
+        assertEquals("helloWorld", viewController.getTitle());
+    }
+
+    @Test
     public void testRootViewController_viewEvents() {
-        ViewController viewController = new HelloWorldViewController(viewEvents);
-        stage.setRootViewController(viewController);
+        stage.setRootViewController(green);
         assertTrue(viewEvents.isEmpty());
 
-        viewController.getView();
-        assertEquals(Collections.singletonList("helloWorld:viewDidLoad"), viewEvents);
+        green.getView();
+        assertEquals(Collections.singletonList("green:viewDidLoad"), viewEvents);
 
         interact(() -> stage.show());
         assertEquals(Arrays.asList(
-                "helloWorld:viewDidLoad",
-                "helloWorld:viewWillAppear",
-                "helloWorld:viewDidAppear"), viewEvents);
+                "green:viewDidLoad",
+                "green:viewWillAppear",
+                "green:viewDidAppear"), viewEvents);
 
         interact(() -> stage.hide());
         assertEquals(Arrays.asList(
-                "helloWorld:viewDidLoad",
-                "helloWorld:viewWillAppear",
-                "helloWorld:viewDidAppear",
-                "helloWorld:viewWillDisappear",
-                "helloWorld:viewDidDisappear"), viewEvents);
+                "green:viewDidLoad",
+                "green:viewWillAppear",
+                "green:viewDidAppear",
+                "green:viewWillDisappear",
+                "green:viewDidDisappear"), viewEvents);
     }
 
     @Test

@@ -5,12 +5,9 @@
 
 package de.muspellheim.javafx.viewcontroller;
 
-import java.util.*;
+public class HelloWorldViewController extends ViewController {
 
-public class HelloWorldViewController extends TestingViewController {
-
-    public HelloWorldViewController(List<String> viewEvents) {
-        super(HelloWorldViewController.class.getResource("HelloWorld.fxml"), viewEvents);
+    public HelloWorldViewController() {
         setTitle("helloWorld");
     }
 
