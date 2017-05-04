@@ -171,24 +171,6 @@ public class ViewController {
         return scene;
     }
 
-    /*
-    private Scene doDismiss(Deque<ViewController> viewControllers) {
-        Scene scene;
-        if (viewControllers.peekLast().getPresentedViewController() != null) {
-            viewControllers.peekLast().presentedViewController.viewWillDisappear();
-            viewControllers.peekLast().viewWillAppear();
-            scene = doDismiss(viewControllers.peekLast().getPresentedViewController());
-            viewControllers.peekLast().getPresentedViewController().presentingViewController = null;
-            viewControllers.peekLast().viewDidAppear();
-            viewControllers.peekLast().presentedViewController.viewDidDisappear();
-            viewControllers.peekLast().presentedViewController = null;
-        } else {
-            scene = viewControllers.peekLast().getView().getScene();
-        }
-        return scene;
-    }
-    */
-
     protected void viewWillAppear() {
     }
 

@@ -23,26 +23,31 @@ public class TestingViewController extends ViewController {
 
     @Override
     public void viewDidLoad() {
+        super.viewDidLoad();
         viewEvents.add(getTitle() + ":viewDidLoad");
     }
 
     @Override
     public void viewWillAppear() {
+        super.viewWillAppear();
         viewEvents.add(getTitle() + ":viewWillAppear");
     }
 
     @Override
     public void viewDidAppear() {
+        super.viewDidAppear();
         viewEvents.add(getTitle() + ":viewDidAppear");
     }
 
     @Override
     public void viewWillDisappear() {
+        super.viewWillDisappear();
         viewEvents.add(getTitle() + ":viewWillDisappear");
     }
 
     @Override
     public void viewDidDisappear() {
+        super.viewDidDisappear();
         viewEvents.add(getTitle() + ":viewDidDisappear");
     }
 
