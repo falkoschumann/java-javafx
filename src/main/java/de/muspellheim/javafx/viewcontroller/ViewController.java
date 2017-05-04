@@ -14,8 +14,13 @@ import java.util.*;
 
 /**
  * Provides the infrastructure for managing the views of your JavaFX app.
- * <p> Give location of a FXML file in constructor or override {@link #loadView()} to create view
- * manually and set it with {@link #setView(Parent)}.</p>
+ * <p>
+ * You have the following options to use <code>ViewController</code>
+ * <ul>
+ * <li>Give location of a FXML file in constructor.</li>
+ * <li>Override {@link #loadView()} to create view manually and set it with {@link #setView(Parent)}.</li>
+ * <li>Set this class as FXML controller class and set root fx:id to "view".</p>
+ * </ul>
  * <p>React to view events by override the methods</p>
  * <ul>
  * <li>{@link #viewDidLoad()} called after the view is loaded or created by {@link #loadView()}.</li>

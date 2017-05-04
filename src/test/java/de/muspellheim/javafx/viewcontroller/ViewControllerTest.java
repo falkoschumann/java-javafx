@@ -43,13 +43,21 @@ public class ViewControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testRootViewController_FXML() throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("HelloWorld.fxml"));
+    public void testInitialite_withFxmlController() throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("WithFxmlController.fxml"));
         loader.load();
         ViewController viewController = loader.getController();
 
         assertTrue(viewController.getView() instanceof StackPane);
-        assertEquals("helloWorld", viewController.getTitle());
+        assertEquals("With FXML Controller", viewController.getTitle());
+    }
+
+    @Test
+    public void testInitialite_withoutFxmlController() throws Exception {
+        ViewController viewController = new WithoutFxmlControllerViewController();
+
+        assertTrue(viewController.getView() instanceof StackPane);
+        assertEquals("Without FXML Controller", viewController.getTitle());
     }
 
     @Test
