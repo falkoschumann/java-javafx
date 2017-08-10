@@ -43,7 +43,7 @@ public class ViewControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testInitialite_withFxmlController() throws Exception {
+    public void testInitialize_withFxmlController() throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("WithFxmlController.fxml"));
         loader.load();
         ViewController viewController = loader.getController();
@@ -53,7 +53,7 @@ public class ViewControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testInitialite_withoutFxmlController() throws Exception {
+    public void testInitialize_withoutFxmlController() throws Exception {
         ViewController viewController = new WithoutFxmlControllerViewController();
 
         assertTrue(viewController.getView() instanceof StackPane);
