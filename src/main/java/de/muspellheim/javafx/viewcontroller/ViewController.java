@@ -5,6 +5,7 @@
 
 package de.muspellheim.javafx.viewcontroller;
 
+import javafx.beans.property.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 
@@ -32,49 +33,29 @@ import java.util.*;
  */
 public class ViewController {
 
-    private final URL location;
-    private final ResourceBundle resources;
-
-    private String title;
-
-    @FXML
-    private Parent view;
-
-    private ViewController presentingViewController;
-    private ViewController presentedViewController;
+    /**************************************************************************
+     *              Creating a View Controller Programmatically               *
+     **************************************************************************/
 
     public ViewController() {
         this(null, null);
     }
 
-    public ViewController(URL location) {
-        this(location, null);
+    public ViewController(URL fxmlLocation) {
+        this(fxmlLocation, null);
     }
 
-    public ViewController(URL location, ResourceBundle resources) {
-        this.location = location;
+    public ViewController(URL fxmlLocation, ResourceBundle resources) {
+        this.fxmlLocation = fxmlLocation;
         this.resources = resources;
     }
 
-    public String getTitle() {
-        return title;
-    }
+    /**************************************************************************
+     *                           Managing the View                            *
+     **************************************************************************/
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public URL getLocation() {
-        return location;
-    }
-
-    public ResourceBundle getResources() {
-        return resources;
-    }
-
-    public Parent viewIfLoaded() {
-        return view;
-    }
+    @FXML
+    private Parent view;
 
     public Parent getView() {
         loadViewIfNeeded();
@@ -85,6 +66,21 @@ public class ViewController {
         this.view = view;
     }
 
+    public boolean isViewLoaded() {
+        return viewIfLoaded() != null;
+    }
+
+    protected void loadView() {
+        try {
+            setView(FXMLLoader.load(getFXMLLocation(), getResources()));
+        } catch (IOException ex) {
+            throw new IllegalStateException("Can not load view from location " + getFXMLLocation() + ".", ex);
+        }
+    }
+
+    protected void viewDidLoad() {
+    }
+
     protected void loadViewIfNeeded() {
         if (!isViewLoaded()) {
             loadView();
@@ -92,20 +88,30 @@ public class ViewController {
         }
     }
 
-    public boolean isViewLoaded() {
-        return viewIfLoaded() != null;
+    public Parent viewIfLoaded() {
+        return view;
     }
 
-    protected void loadView() {
-        try {
-            setView(FXMLLoader.load(getLocation(), getResources()));
-        } catch (IOException ex) {
-            throw new IllegalStateException("Can not load view from location " + getLocation() + ".", ex);
+    public StringProperty titleProperty() {
+        if (title == null) {
+            title = new SimpleStringProperty(this, "title", "");
         }
+        return title;
     }
 
-    protected void viewDidLoad() {
+    private StringProperty title;
+
+    public void setTitle(String value) {
+        titleProperty().setValue(value);
     }
+
+    public String getTitle() {
+        return title == null ? "" : title.getValue();
+    }
+
+    /**************************************************************************
+     *                      Presenting View Controllers                       *
+     **************************************************************************/
 
     public void present(ViewController viewControllerToPresent) {
         present(viewControllerToPresent, null);
@@ -125,21 +131,13 @@ public class ViewController {
             completion.run();
     }
 
-    public ViewController getPresentingViewController() {
-        return presentingViewController;
-    }
-
-    public ViewController getPresentedViewController() {
-        return presentedViewController;
-    }
-
     public void dismiss() {
         dismiss(null);
     }
 
     public void dismiss(Runnable completion) {
         if (getPresentedViewController() != null) {
-            Scene scene = doDismiss(getPresentedViewController());
+            doDismiss(getPresentedViewController());
             if (completion != null)
                 completion.run();
         } else if (getPresentingViewController() != null) {
@@ -147,8 +145,8 @@ public class ViewController {
         }
     }
 
-    private Scene doDismiss(ViewController viewController) {
-        return doDismiss(new LinkedList<>(Collections.singleton(viewController)));
+    private void doDismiss(ViewController viewController) {
+        doDismiss(new LinkedList<>(Collections.singleton(viewController)));
     }
 
     private Scene doDismiss(Deque<ViewController> viewControllers) {
@@ -178,6 +176,10 @@ public class ViewController {
         return scene;
     }
 
+    /**************************************************************************
+     *                       Responding to View Events                        *
+     **************************************************************************/
+
     protected void viewWillAppear() {
     }
 
@@ -189,6 +191,40 @@ public class ViewController {
 
     protected void viewDidDisappear() {
     }
+
+    /**************************************************************************
+     *                 Getting Other Related View Controllers                 *
+     **************************************************************************/
+
+    private ViewController presentingViewController;
+
+    public ViewController getPresentingViewController() {
+        return presentingViewController;
+    }
+
+    private ViewController presentedViewController;
+
+    public ViewController getPresentedViewController() {
+        return presentedViewController;
+    }
+
+    /**************************************************************************
+     *                      Getting Nib FIle Information                      *
+     **************************************************************************/
+
+    private final URL fxmlLocation;
+
+    public URL getFXMLLocation() {
+        return fxmlLocation;
+    }
+
+    private final ResourceBundle resources;
+
+    public ResourceBundle getResources() {
+        return resources;
+    }
+
+    /**************************************************************************/
 
     @Override
     public String toString() {
