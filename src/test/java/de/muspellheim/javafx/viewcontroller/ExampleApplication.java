@@ -77,9 +77,10 @@ public class ExampleApplication extends Application {
 
         };
 
-        StageController controller = new StageController(primaryStage);
-        controller.setRootViewController(green);
-        controller.show();
+        StageController stageController = new StageController(primaryStage);
+        stageController.setRootViewController(green);
+
+        primaryStage.show();
     }
 
 }

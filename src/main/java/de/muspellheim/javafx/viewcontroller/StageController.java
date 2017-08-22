@@ -8,49 +8,43 @@ package de.muspellheim.javafx.viewcontroller;
 import javafx.scene.*;
 import javafx.stage.*;
 
-/**
- * Manage the root view controller, show and hide a stage.
- * <p>
- * Override {@link #createScene()} to customize the scene.
- */
 public class StageController {
 
     private final Stage stage;
-
-    private ViewController rootViewController;
+    private Scene scene;
 
     public StageController(Stage stage) {
         this.stage = stage;
+        stage.onShowingProperty().set(event -> existRootViewController(() -> getRootViewController().viewWillAppear()));
+        stage.onShownProperty().set(event -> existRootViewController(() -> getRootViewController().viewDidAppear()));
+        stage.onHidingProperty().set(event -> existRootViewController(() -> getRootViewController().viewWillDisappear()));
+        stage.onHiddenProperty().set(event -> existRootViewController(() -> getRootViewController().viewDidDisappear()));
+    }
 
-        stage.onShowingProperty().set(event -> getRootViewController().viewWillAppear());
-        stage.onShownProperty().set(event -> getRootViewController().viewDidAppear());
-        stage.onHidingProperty().set(event -> getRootViewController().viewWillDisappear());
-        stage.onHiddenProperty().set(event -> getRootViewController().viewDidDisappear());
+    private void existRootViewController(Runnable ifTrue) {
+        if (getRootViewController() != null)
+            ifTrue.run();
     }
 
     public Stage getStage() {
         return stage;
     }
 
-    public ViewController getRootViewController() {
-        return rootViewController;
-    }
+    private ViewController rootViewController;
 
-    public void setRootViewController(ViewController rootViewController) {
+    public final void setRootViewController(ViewController rootViewController) {
         this.rootViewController = rootViewController;
+
+        if (scene == null) {
+            scene = new Scene(rootViewController.getView());
+            stage.setScene(scene);
+        } else {
+            scene.setRoot(rootViewController.getView());
+        }
     }
 
-    public void show() {
-        stage.setScene(createScene());
-        stage.show();
-    }
-
-    protected Scene createScene() {
-        return new Scene(getRootViewController().getView());
-    }
-
-    public void hide() {
-        stage.hide();
+    public final ViewController getRootViewController() {
+        return rootViewController;
     }
 
 }
