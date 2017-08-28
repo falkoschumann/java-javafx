@@ -39,7 +39,7 @@ public class ViewControllerTest extends ApplicationTest {
 
     @Override
     public void stop() throws Exception {
-        stageController.getStage().hide();
+        stageController.close();
     }
 
     @Test
