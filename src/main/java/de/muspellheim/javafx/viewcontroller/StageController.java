@@ -17,6 +17,7 @@ public class StageController {
 
     public StageController(Stage stage) {
         this.stage = Objects.requireNonNull(stage, "stage");
+
         stage.onShowingProperty().set(event -> existRootViewController(() -> getRootViewController().viewWillAppear()));
         stage.onShownProperty().set(event -> existRootViewController(() -> getRootViewController().viewDidAppear()));
         stage.onHidingProperty().set(event -> existRootViewController(() -> getRootViewController().viewWillDisappear()));

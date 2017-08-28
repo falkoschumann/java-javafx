@@ -33,9 +33,8 @@ import java.util.*;
  */
 public class ViewController {
 
-    /**************************************************************************
-     *              Creating a View Controller Programmatically               *
-     **************************************************************************/
+    private final URL fxmlLocation;
+    private final ResourceBundle resources;
 
     public ViewController() {
         this(null, null);
@@ -50,9 +49,13 @@ public class ViewController {
         this.resources = resources;
     }
 
-    /**************************************************************************
-     *                           Managing the View                            *
-     **************************************************************************/
+    public URL getFXMLLocation() {
+        return fxmlLocation;
+    }
+
+    public ResourceBundle getResources() {
+        return resources;
+    }
 
     @FXML
     private Parent view;
@@ -72,7 +75,12 @@ public class ViewController {
 
     protected void loadView() {
         try {
-            setView(FXMLLoader.load(getFXMLLocation(), getResources()));
+            FXMLLoader loader = new FXMLLoader(getFXMLLocation(), getResources());
+            if (loader.getController() == null)
+                loader.setController(this);
+            Parent view = loader.load();
+            if (this.view == null)
+                this.view = view;
         } catch (IOException ex) {
             throw new IllegalStateException("Can not load view from location " + getFXMLLocation() + ".", ex);
         }
@@ -92,13 +100,6 @@ public class ViewController {
         return view;
     }
 
-    public StringProperty titleProperty() {
-        if (title == null) {
-            title = new SimpleStringProperty(this, "title", "");
-        }
-        return title;
-    }
-
     private StringProperty title;
 
     public void setTitle(String value) {
@@ -109,9 +110,12 @@ public class ViewController {
         return title == null ? "" : title.getValue();
     }
 
-    /**************************************************************************
-     *                      Presenting View Controllers                       *
-     **************************************************************************/
+    public StringProperty titleProperty() {
+        if (title == null) {
+            title = new SimpleStringProperty(this, "title", "");
+        }
+        return title;
+    }
 
     public void present(ViewController viewControllerToPresent) {
         present(viewControllerToPresent, null);
@@ -176,10 +180,6 @@ public class ViewController {
         return scene;
     }
 
-    /**************************************************************************
-     *                       Responding to View Events                        *
-     **************************************************************************/
-
     protected void viewWillAppear() {
     }
 
@@ -192,10 +192,6 @@ public class ViewController {
     protected void viewDidDisappear() {
     }
 
-    /**************************************************************************
-     *                 Getting Other Related View Controllers                 *
-     **************************************************************************/
-
     private ViewController presentingViewController;
 
     public ViewController getPresentingViewController() {
@@ -207,24 +203,6 @@ public class ViewController {
     public ViewController getPresentedViewController() {
         return presentedViewController;
     }
-
-    /**************************************************************************
-     *                      Getting Nib FIle Information                      *
-     **************************************************************************/
-
-    private final URL fxmlLocation;
-
-    public URL getFXMLLocation() {
-        return fxmlLocation;
-    }
-
-    private final ResourceBundle resources;
-
-    public ResourceBundle getResources() {
-        return resources;
-    }
-
-    /**************************************************************************/
 
     @Override
     public String toString() {
