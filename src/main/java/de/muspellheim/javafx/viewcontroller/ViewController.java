@@ -17,10 +17,11 @@ import java.util.*;
  * Provides the infrastructure for managing the views of your JavaFX app.
  * <p>
  * You have the following options to use <code>ViewController</code>
+ * </p>
  * <ul>
  * <li>Give location of a FXML file in constructor.</li>
  * <li>Override {@link #loadView()} to create view manually and set it with {@link #setView(Parent)}.</li>
- * <li>Set this class as FXML controller class and set root fx:id to "view".</p>
+ * <li>Set this class as FXML controller class and set root fx:id to "view".</li>
  * </ul>
  * <p>React to view events by override the methods</p>
  * <ul>
