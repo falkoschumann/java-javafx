@@ -48,6 +48,7 @@ public class ViewControllerTest extends ApplicationTest {
         loader.load();
         ViewController viewController = loader.getController();
 
+        assertNotNull(viewController.getView());
         assertTrue(viewController.getView() instanceof StackPane);
         assertEquals("With FXML Controller", viewController.getTitle());
     }
@@ -56,6 +57,7 @@ public class ViewControllerTest extends ApplicationTest {
     public void testInitialize_withoutFxmlController() throws Exception {
         ViewController viewController = new WithoutFxmlControllerViewController();
 
+        assertNotNull(viewController.getView());
         assertTrue(viewController.getView() instanceof StackPane);
         assertEquals("Without FXML Controller", viewController.getTitle());
     }

@@ -77,11 +77,8 @@ public class ViewController {
     protected void loadView() {
         try {
             FXMLLoader loader = new FXMLLoader(getFXMLLocation(), getResources());
-            if (loader.getController() == null)
-                loader.setController(this);
-            Parent view = loader.load();
-            if (this.view == null)
-                this.view = view;
+            loader.setController(this);
+            loader.load();
         } catch (IOException ex) {
             throw new IllegalStateException("Can not load view from location " + getFXMLLocation() + ".", ex);
         }

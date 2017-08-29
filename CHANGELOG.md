@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## 1.0.1 - 2017-08-29
+
+### Changed
+
+*   Simplify load view.
+
 ## 1.0.0 - 2017-08-28
 
 ### Added

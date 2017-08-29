@@ -1,6 +1,4 @@
 # Gradle
 .gradle/
 build/
-
-# IntelliJ IDEA
-.idea/
+gradle.properties
