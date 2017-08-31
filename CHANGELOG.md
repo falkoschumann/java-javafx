@@ -5,7 +5,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## 1.0.1 - 2017-08-29
+## [1.1.0] - 2017-09-01
+
+### Added
+
+*   Add popup for hints for invalid control content.
+*   Add static method to create view controller and load FXML file. 
+
+## [1.0.1] - 2017-08-29
 
 ### Changed
 
@@ -21,4 +28,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 *   Library is an OSGi bundle.
 
 
-[Unreleased]: https://github.com/falkoschumann/javafx-viewcontroller/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/falkoschumann/javafx-viewcontroller/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/falkoschumann/javafx-viewcontroller/compare/v1.0.1...1.1.0
+[1.0.1]: https://github.com/falkoschumann/javafx-viewcontroller/compare/v1.0.0...1.0.1
