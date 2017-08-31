@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+*   Add popup for hints for invalid control content.
 *   Add static method to create view controller and load FXML file. 
 
 
