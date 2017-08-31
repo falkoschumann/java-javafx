@@ -50,6 +50,28 @@ public class ViewController {
         this.resources = resources;
     }
 
+    /**
+     * Create a controller and load its view.
+     * <p>The controller must be named <code>*Controller</code> and the view must be named <code>*View.fxml</code>. Both
+     * files must be in the same package.</p>
+     *
+     * @param controllerType the controller type.
+     * @param <T>            the controller type
+     * @return the controller initialized with the view.
+     */
+    public static <T extends ViewController> T createController(Class<T> controllerType) {
+        String viewname = controllerType.getSimpleName().replace("Controller", "View") + ".fxml";
+        URL location = controllerType.getResource(viewname);
+        FXMLLoader loader = new FXMLLoader(location);
+        try {
+            loader.load();
+        } catch (IOException ex) {
+            throw new IllegalStateException("Can not load view from location " + location + ": " + ex, ex);
+        }
+        return loader.getController();
+    }
+
+
     public URL getFXMLLocation() {
         return fxmlLocation;
     }

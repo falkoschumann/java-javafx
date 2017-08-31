@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 1.0.1 - 2017-08-29
 
+### Added
+
+*   Add static method to create view controller and load FXML file. 
+
+
 ### Changed
 
 *   Simplify load view.
