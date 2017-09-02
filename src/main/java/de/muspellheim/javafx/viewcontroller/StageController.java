@@ -49,6 +49,10 @@ public class StageController {
         return stage;
     }
 
+    public void show() {
+        stage.show();
+    }
+
     public void close() {
         stage.close();
     }
