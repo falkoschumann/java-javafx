@@ -61,6 +61,7 @@ public class StageController {
 
     public final void setRootViewController(ViewController rootViewController) {
         this.rootViewController = Objects.requireNonNull(rootViewController, "rootViewController");
+        stage.titleProperty().bind(rootViewController.titleProperty());
 
         if (scene == null) {
             scene = new Scene(rootViewController.getView(), width, height);
