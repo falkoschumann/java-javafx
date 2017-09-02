@@ -5,6 +5,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.0] - 2017-09-02
+
+### Added
+
+*   Stage controller binds stage title to root view controller title.
+*   Stage controller can configure with scenes size.
+*   Stage controller create stage if not exists.
+
 ## [1.1.0] - 2017-09-01
 
 ### Added
