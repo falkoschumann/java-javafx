@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/falkoschumann/javafx-viewcontroller.svg?branch=feature%2Fview-controller)](https://travis-ci.org/falkoschumann/javafx-viewcontroller)
-[![license](https://img.shields.io/github/license/falkoschumann/javafx-viewcontroller.svg)]()
+[![Build Status](https://travis-ci.org/falkoschumann/java-javafx.svg?branch=master)](https://travis-ci.org/falkoschumann/java-javafx)
+[![license](https://img.shields.io/github/license/falkoschumann/java-javafx.svg)]()
 
 
-JavaFX View Controller
-======================
+Muspellheim JavaFX
+==================

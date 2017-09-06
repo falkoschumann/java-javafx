@@ -1,0 +1,5 @@
+-exportcontents: de.muspellheim.javafx.*
+-sources: true
+
+Bundle-Name: Muspellheim JavaFX
+Bundle-SymbolicName: de.muspellheim.javafx
