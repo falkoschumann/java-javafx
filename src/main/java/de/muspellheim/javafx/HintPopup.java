@@ -13,13 +13,20 @@ import javafx.scene.paint.*;
 import javafx.stage.*;
 
 /**
- * This popup can display an hint to fill out a control.
- * <p>Usually a hint popup show a message that explain invalid input of a text field or other controls</p>
+ * This popup can display an hint how to fill out a control.
+ * <p>Usually a hint popup show a message that explain invalid input of a text field or other controls. The popup shows
+ * near a owner control.</p>
+ * <p>Usage: Bind a valid flag on show and hide this popup.</p>
+ *
+ * @see #show(String, Region)
  */
 public class HintPopup extends Popup {
 
     private final Label label;
 
+    /**
+     * Create a hint popup.
+     */
     public HintPopup() {
         label = new Label();
         StackPane stack = new StackPane();
@@ -28,6 +35,12 @@ public class HintPopup extends Popup {
         getContent().add(stack);
     }
 
+    /**
+     * Show this popup with a hint text.
+     *
+     * @param text  the hint.
+     * @param owner the owner of this popup.
+     */
     public void show(String text, Region owner) {
         label.setText(text);
         Point2D location = getLocation(owner);

@@ -14,7 +14,7 @@ import java.net.*;
 import java.util.*;
 
 /**
- * Provides the infrastructure for managing the views of your JavaFX app.
+ * Base class for view controllers with and without FXML file.
  * <p>
  * You have the following options to use <code>ViewController</code>
  * </p>

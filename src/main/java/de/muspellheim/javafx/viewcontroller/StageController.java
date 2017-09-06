@@ -10,6 +10,9 @@ import javafx.stage.*;
 
 import java.util.*;
 
+/**
+ * Manage a stage and hold the root view controller of an view controller hierarchy.
+ */
 public class StageController {
 
     private final Stage stage;
