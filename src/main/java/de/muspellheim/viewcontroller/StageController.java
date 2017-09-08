@@ -3,7 +3,7 @@
  * Released under the terms of the MIT License.
  */
 
-package de.muspellheim.javafx.viewcontroller;
+package de.muspellheim.viewcontroller;
 
 import javafx.scene.*;
 import javafx.stage.*;
@@ -12,7 +12,9 @@ import java.util.*;
 
 /**
  * Manage a stage and hold the root view controller of an view controller hierarchy.
- * <p>Example usage:</p>
+ * <p>
+ * Example usage:
+ * </p>
  * <pre><code>public class ExampleApp extends Application {
 
     public void start(Stage stage) throws Exception {

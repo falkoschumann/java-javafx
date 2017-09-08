@@ -32,7 +32,7 @@ dependencies {
 
 task bundleJar(type: Bundle) {
     bndfile = 'bundle.bnd'
-    baseName = 'de.muspellheim.javafx'
+    baseName = 'de.muspellheim.viewcontroller'
     classifier = 'bundle'
     from sourceSets.main.output
     sourceSet = sourceSets.main

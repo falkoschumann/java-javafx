@@ -3,7 +3,7 @@
  * Released under the terms of the MIT License.
  */
 
-package de.muspellheim.javafx.viewcontroller;
+package de.muspellheim.viewcontroller;
 
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;

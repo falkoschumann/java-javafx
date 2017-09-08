@@ -6,4 +6,4 @@
 /**
  * Introduce a view controller API with view hierarchy and view events.
  */
-package de.muspellheim.javafx.viewcontroller;
+package de.muspellheim.viewcontroller;

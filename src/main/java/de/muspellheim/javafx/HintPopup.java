@@ -14,9 +14,13 @@ import javafx.stage.*;
 
 /**
  * This popup can display an hint how to fill out a control.
- * <p>Usually a hint popup show a message that explain invalid input of a text field or other controls. The popup shows
- * near a owner control.</p>
- * <p>Usage: Bind a valid flag on show and hide this popup.</p>
+ * <p>
+ * Usually a hint popup show a message that explain invalid input of a text field or other controls. The popup show near
+ * a owner control.
+ * </p>
+ * <p>
+ * Usage: Bind a valid flag on show and hide this popup.
+ * </p>
  *
  * @see #show(String, Region)
  */
