@@ -24,7 +24,7 @@ import java.util.*;
  * <li>Override {@link #loadView()} to create view manually and set it with {@link #setView(Parent)}.</li>
  * </ul>
  * <p>
- * Respond to view events by override following methods
+ * Respond to view live cycle events by override following methods
  * </p>
  * <ul>
  * <li>{@link #viewDidLoad()}</li>
@@ -33,6 +33,9 @@ import java.util.*;
  * <li>{@link #viewWillDisappear()}</li>
  * <li>{@link #viewDidDisappear()}</li>
  * </ul>
+ * <p>
+ * Present and dismiss view controllers modally as stack.
+ * </p>
  *
  * @see #createController(Class)
  */

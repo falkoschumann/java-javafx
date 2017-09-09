@@ -11,7 +11,7 @@ import javafx.stage.*;
 import java.util.*;
 
 /**
- * Manage a stage and hold the root view controller of an view controller hierarchy.
+ * Controls a stage with a view controller hierarchy and manage their live cycle.
  * <p>
  * Example usage:
  * </p>

@@ -3,7 +3,7 @@
  * Released under the terms of the MIT License.
  */
 
-package de.muspellheim.javafx;
+package de.muspellheim.viewcontroller;
 
 import javafx.geometry.*;
 import javafx.scene.*;
