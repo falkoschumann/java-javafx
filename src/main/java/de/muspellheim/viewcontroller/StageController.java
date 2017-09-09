@@ -16,15 +16,15 @@ import java.util.*;
  * Example usage:
  * </p>
  * <pre><code>public class ExampleApp extends Application {
-
-    public void start(Stage stage) throws Exception {
-        StageController stageController = new StageController(stage, 800, 600);
-        ViewController rootController = ViewController.createController(ExampleController.class);
-        stageController.setRootViewController(rootController);
-        stageController.show();
-    }
-
-}</code></pre>
+ *
+ * public void start(Stage stage) throws Exception {
+ * StageController stageController = new StageController(stage, 800, 600);
+ * ViewController rootController = ViewController.createController(ExampleController.class);
+ * stageController.setRootViewController(rootController);
+ * stageController.show();
+ * }
+ *
+ * }</code></pre>
  *
  * @see ViewController
  * @see ViewController#createController(Class)

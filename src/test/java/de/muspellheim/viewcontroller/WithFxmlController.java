@@ -5,9 +5,9 @@
 
 package de.muspellheim.viewcontroller;
 
-public class WithFxmlControllerViewController extends ViewController {
+public class WithFxmlController extends ViewController {
 
-    public WithFxmlControllerViewController() {
+    public WithFxmlController() {
         setTitle("With FXML Controller");
     }
 

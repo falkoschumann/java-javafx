@@ -39,7 +39,7 @@ import java.util.*;
 public class ViewController {
 
     private final URL fxmlLocation;
-    private final ResourceBundle resources;
+    private ResourceBundle resources;
 
     /**
      * Create controller with FXML view or manual without FXML.
@@ -84,7 +84,8 @@ public class ViewController {
      * Create a controller and load its view by convention.
      * <p>
      * The controller must be named <code>{Foo}Controller</code> and the view must be named <code>{Foo}View.fxml</code>.
-     * Both files must be in the same package.
+     * Optional resource bundles must be named <code>{Foo}[_language].properties</code>. All files must be in the same
+     * package.
      * </p>
      *
      * @param controllerType the controller type.
@@ -92,15 +93,24 @@ public class ViewController {
      * @return a controller instance with loaded and initialized view.
      */
     public static <T extends ViewController> T createController(Class<T> controllerType) {
-        String viewname = controllerType.getSimpleName().replace("Controller", "View") + ".fxml";
-        URL location = controllerType.getResource(viewname);
-        FXMLLoader loader = new FXMLLoader(location);
+        String viewName = controllerType.getSimpleName().replace("Controller", "View") + ".fxml";
+        String resourcesName = controllerType.getName().substring(0, controllerType.getName().length() - "Controller".length());
+        ResourceBundle resources;
+        try {
+            resources = ResourceBundle.getBundle(resourcesName);
+        } catch (MissingResourceException ignored) {
+            resources = null;
+        }
+        URL location = controllerType.getResource(viewName);
+        FXMLLoader loader = new FXMLLoader(location, resources);
         try {
             loader.load();
         } catch (IOException ex) {
             throw new IllegalStateException("Can not load view from location " + location + ": " + ex, ex);
         }
-        return loader.getController();
+        ViewController controller = loader.getController();
+        controller.resources = resources;
+        return (T) controller;
     }
 
     /**
