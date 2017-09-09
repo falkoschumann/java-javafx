@@ -241,10 +241,24 @@ public class ViewController {
         return title == null ? "" : title.getValue();
     }
 
+    /**
+     * Presents a view controller modally.
+     *
+     * @param viewControllerToPresent the view controller to display over the current view controllers content.
+     */
     public void present(ViewController viewControllerToPresent) {
         present(viewControllerToPresent, null);
     }
 
+    /**
+     * Presents a view controller modally.
+     * <p>
+     * Several view controller can present in a stack, only the the top view controller is visible.
+     * </p>
+     *
+     * @param viewControllerToPresent the view controller to display over the current view controllers content.
+     * @param completion              execute after the presentation finished.
+     */
     public void present(ViewController viewControllerToPresent, Runnable completion) {
         Parent viewToPresent = viewControllerToPresent.getView();
         viewWillDisappear();
@@ -259,10 +273,24 @@ public class ViewController {
             completion.run();
     }
 
+    /**
+     * Dismisses this view controller.
+     * <p>
+     * If this is not the top view controller, dismiss all view controller over this view controller also.
+     * </p>
+     */
     public void dismiss() {
         dismiss(null);
     }
 
+    /**
+     * Dismisses this view controller.
+     * <p>
+     * If this is not the top view controller, dismiss all view controller over this view controller also.
+     * </p>
+     *
+     * @param completion execute after the view controller is dismissed.
+     */
     public void dismiss(Runnable completion) {
         if (getPresentedViewController() != null) {
             doDismiss(getPresentedViewController());
@@ -330,12 +358,22 @@ public class ViewController {
 
     private ViewController presentingViewController;
 
+    /**
+     * Get the view controller presenting this view controller.
+     *
+     * @return the presenting view controller or <code>null</code> if no presenting view controller exists.
+     */
     public ViewController getPresentingViewController() {
         return presentingViewController;
     }
 
     private ViewController presentedViewController;
 
+    /**
+     * Get the view controller presented by this view controller.
+     *
+     * @return the presented view controller or <code>null</code> if this view controller present no view controller.
+     */
     public ViewController getPresentedViewController() {
         return presentedViewController;
     }
